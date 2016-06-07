@@ -1,5 +1,7 @@
 package com.tugo.learn.netty.time;
 
+import java.util.Date;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,8 +14,10 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter
   {
     ByteBuf buf = (ByteBuf)msg;
     try {
-      int time = buf.readInt();
-      System.out.print("time is " + time);
+      long time = buf.readUnsignedInt();
+      long currentTimeMillis = (time - 2208988800L) * 1000L;
+      System.out.print("time is in millis " + currentTimeMillis);
+      System.out.println(new Date(currentTimeMillis));
       ctx.close();
     } finally {
       ReferenceCountUtil.release(msg);
